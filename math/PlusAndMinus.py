@@ -2,7 +2,12 @@ import random
 
 
 def GetVariable( ):
-    return random.randint(100,1000)
+    range = random.randint(0,1)
+    if range == 0:
+        return random.randint(100,1000)
+    else:
+        return random.randint(50,100)
+
  
 
 def Generage():
@@ -30,7 +35,7 @@ def Output2File_Two():
 
 def Output2File_Three():
     f = open("minus.txt", mode="w+", encoding="utf-8")
-    count = 30
+    count = 180
     i =  0
     while i < count:
         i = i + 1
