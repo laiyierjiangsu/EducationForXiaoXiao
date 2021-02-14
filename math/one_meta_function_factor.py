@@ -46,4 +46,45 @@ def Output2File():
     f.flush()
     f.close()
 
-Output2File()
+#Output2File()
+
+class Pipe(object):
+    def __init__(self, func):
+        self.func = func
+        print("pipe init func {}", func.__name__)
+ 
+    def __ror__(self, other):
+        def generator():
+            for obj in other:
+                if obj is not None:
+                    print("yield begin obj {} fun {} ".format(obj,self.func.__name__))
+                    yield self.func(obj)
+                    print("yield end obj {} fun {} ".format(obj,self.func.__name__))
+                else:
+                    print("yield end obj is null, fun {} ".format(self.func.__name__))
+        return generator()
+ 
+@Pipe
+def even_filter(num):
+    return num if num % 2 == 0 else None
+ 
+@Pipe
+def multiply_by_three(num):
+    return num*3
+ 
+@Pipe
+def convert_to_string(num):
+    return 'The Number: %s' % num
+ 
+@Pipe
+def echo(item):
+    print(item)
+    return item
+ 
+def force(sqs):
+    for item in sqs: print("item {}".format(item))
+ 
+nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+ 
+force(nums | even_filter | multiply_by_three | convert_to_string | echo)
+

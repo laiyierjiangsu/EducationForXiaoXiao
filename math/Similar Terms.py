@@ -1,5 +1,39 @@
 # coding=utf-8
 import random
+letter_arr = ["x" , "y" , "z"]
+
+def Generage_term(index):
+        divisor = random.randint(10,99)
+        answer = random.randint(3000,9999)
+        reminder = random.randint(2,9)
+        dividend = divisor*answer + reminder
+        formula = "{} ÷ {}= ___余___".format(dividend,divisor)
+        formula_answer = "{} ÷ {}= {}余{}".format(dividend,divisor,answer,reminder)
+        return formula, formula_answer
+
+f_practice = open("terms_merge.txt", mode="w+", encoding="utf-8")
+count = 100
+i =  1
+mutiple_arr = [1,2,3,4,5,6,7,8,9]
+sign = [0, 0, 0]
+sign_str = ["+", "-"]
+
+while i < count:
+    expression = ""
+    for j in range(0,5):
+        letter = letter_arr[random.randint(0,2)]
+        factor = mutiple_arr[random.randint(0,8)]
+        factor_str = ""
+        if factor != 1:
+            factor_str = str(factor)
+        expression = expression + "{}{}{} ".format(sign_str[random.randint(0,1)],factor,letter)
+    f_practice.write("{}. {} = _________________________    ".format(i, expression))
+    f_practice.write("\n")
+    i = i + 1
+f_practice.flush()
+
+
+
 def Generage_simple():
     divisor = random.randint(2,9)
     divisor1 = random.randint(2,9)
