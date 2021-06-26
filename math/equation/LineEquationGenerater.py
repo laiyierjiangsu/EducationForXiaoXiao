@@ -18,8 +18,8 @@ def row_printer(fp,fa):
     for i in range(0,equation_group_count):
         global g_num
         meta_result = [0,1]
-        meta_result[0] = random.randint(1,5)
-        meta_result[1] = random.randint(1,7)
+        meta_result[0] = random.randint(1,9)
+        meta_result[1] = random.randint(1,9)
         equation_group = EquationGroup(len(meta_name),meta_name,meta_result)
         printer = Equation_Printer()
         printer.equation_group = equation_group
@@ -65,9 +65,9 @@ def row_printer(fp,fa):
 
 if __name__ == "__main__":
 
-    f_practice = open("two_unknown_equation.txt", mode="w+", encoding="utf-8")
-    f_answer = open("two_unknown_equation_answer.txt", mode="w+", encoding="utf-8")
-    count = 10
+    f_practice = open("equation\\two_unknown_equation.txt", mode="w+", encoding="utf-8")
+    f_answer = open("equation\\two_unknown_equation_answer.txt", mode="w+", encoding="utf-8")
+    count = 30
     i =  0
     while i < count:
         row_printer(f_practice,f_answer)
