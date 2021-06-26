@@ -9,10 +9,12 @@ class Meta(object):
         # 是第几个参数
         self.index = index
         # 分母
-        self.denominator = random.randint(2,9)
+        self.denominator = random.randint(1,9)
         # 分子
-        self.numerator = random.randint(1,self.denominator-1)
-    
+        self.numerator = random.randint(1,9)
+        # 随机生产的小数值
+        self.decimal = int(float(Fraction(self.numerator, self.denominator) ) * 10)/10
+        #print(self.decimal)
         # 符号:0 为 正数 ， 非0 为 负数
         self.sign = random.randint(0,1)
         # 运算符号，第一个参数忽略[0,1,2,3]->[+,-,*,/]
@@ -26,25 +28,25 @@ class Meta(object):
             self.sign_desc = "+"
             # 第一个不用显示正好
             if self.index == 0 :
-                ret = "({}) ".format(Fraction(self.numerator, self.denominator))
+                ret = "{} ".format(self.decimal)
             else:
-                ret = "{}({}) ".format(self.operater_desc[self.operater],Fraction(self.numerator, self.denominator))
+                ret = "{}{}  ".format(self.operater_desc[self.operater],self.decimal)
             
         else:
             self.sign_desc = "-"
             # 第一个不用加括号
             if self.index == 0 :
-                ret = "{}({}) ".format(self.sign_desc,Fraction(self.numerator, self.denominator))
+                ret = "{}{} ".format(self.sign_desc,self.decimal)
             else:
                 # 如果是加号，省略运算符
                 if self.operater == 0:
-                    ret = "{}({}) ".format(self.sign_desc,Fraction(self.numerator, self.denominator))
+                    ret = "{}{}  ".format(self.sign_desc,self.decimal)
                 else:
-                    ret = "{}({}{}) ".format(self.operater_desc[self.operater],self.sign_desc,Fraction(self.numerator, self.denominator))
+                    ret = "{}({}{}) ".format(self.operater_desc[self.operater],self.sign_desc,self.decimal)
         return ret
         #具体的值
     def value(self):
-        return Fraction(self.numerator,self.denominator)
+        return self.decimal
 
 class Express:
     def __init__(self):
@@ -86,8 +88,8 @@ class Express:
 
 if __name__ == "__main__": 
     print(Fraction(1,2) * Fraction(1,3))
-    f_practice = open("fraction and decimal\\fraction.txt", mode="w+", encoding="utf-8")
-    f_answer = open("fraction and decimal\\fraction_answer.txt", mode="w+", encoding="utf-8")
+    f_practice = open("fraction and decimal\\decimal.txt", mode="w+", encoding="utf-8")
+    f_answer = open("fraction and decimal\\decimal_answer.txt", mode="w+", encoding="utf-8")
     raw = 150
     i =  0
     while i < raw:
