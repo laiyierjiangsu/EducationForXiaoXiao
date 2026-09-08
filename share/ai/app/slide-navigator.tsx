@@ -29,7 +29,14 @@ function DirectoryContents({
     .filter(({ scene, i }) => {
       if (!needle) return true;
       if (/^\d+$/.test(needle)) return i + 1 === Number(needle);
-      return [scene.title, chapters[scene.chapter], ...scene.steps]
+      return [
+        scene.title,
+        scene.intro,
+        scene.takeaway,
+        chapters[scene.chapter],
+        ...scene.points.flat(),
+        ...scene.steps,
+      ]
         .join(' ')
         .toLocaleLowerCase()
         .includes(needle);
@@ -50,6 +57,7 @@ function DirectoryContents({
         </svg>
         <input
           type="search"
+          maxLength={180}
           aria-label="搜索目录"
           placeholder="搜索标题、内容或页码"
           value={query}
@@ -128,23 +136,27 @@ function DirectoryContents({
                           </span>
                           <span>{title}</span>
                         </button>
-                        <button
-                          className="directory-steps-toggle"
-                          aria-label={`${stepsOpen ? '收起' : '展开'}第 ${i + 1} 页的步骤`}
-                          aria-expanded={stepsOpen}
-                          aria-controls={`directory-steps-${scene.id}`}
-                          onClick={() => setExpandedSlide(stepsOpen ? null : i)}
-                        >
-                          {scene.steps.length}
-                          <span aria-hidden="true">
-                            {stepsOpen ? '⌃' : '⌄'}
-                          </span>
-                        </button>
+                        {scene.steps.length > 1 && (
+                          <button
+                            className="directory-steps-toggle"
+                            aria-label={`${stepsOpen ? '收起' : '展开'}第 ${i + 1} 页的步骤`}
+                            aria-expanded={stepsOpen}
+                            aria-controls={`directory-steps-${scene.id}`}
+                            onClick={() =>
+                              setExpandedSlide(stepsOpen ? null : i)
+                            }
+                          >
+                            {scene.steps.length}
+                            <span aria-hidden="true">
+                              {stepsOpen ? '⌃' : '⌄'}
+                            </span>
+                          </button>
+                        )}
                       </div>
                       <ol
                         className="directory-steps"
                         id={`directory-steps-${scene.id}`}
-                        hidden={!stepsOpen}
+                        hidden={!stepsOpen || scene.steps.length <= 1}
                       >
                         {scene.steps.map((caption, j) => (
                           <li key={j}>
@@ -169,7 +181,11 @@ function DirectoryContents({
           );
         })}
       </nav>
-      <div className="directory-help">点标题从头开始 · 点步骤直接定位</div>
+      <div className="directory-help">
+        ← → 翻页 · M 目录 · F 全屏 · Home / End 首尾页
+        <br />
+        只有手动演示页提供状态选择；R 重置演示。
+      </div>
     </>
   );
 }
@@ -240,7 +256,8 @@ export default function SlideNavigator({
           <div>
             <h2 id="directory-title">讲座目录</h2>
             <p>
-              {scenes.length} 页 · 当前第 {index + 1} 页 / 第 {step + 1} 步
+              {scenes.length} 页 · 当前第 {index + 1} 页
+              {scenes[index].steps.length > 1 ? ` / 演示 ${step + 1}` : ''}
             </p>
           </div>
           <button
